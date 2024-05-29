@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 
 ##These are my models, they are 8 in number; Customuser, Equipment,
 ##Booking, Payment, Notification, Maintenance, Comment, Review,
@@ -7,6 +7,14 @@ from django.contrib.auth.models import AbstractUser
 
 #1.
 class CustomUser(AbstractUser):
+    CUSTOMER = 'customer'
+    ADMIN = 'admin'
+    USER_TYPE_CHOICES = [
+        (CUSTOMER, 'Customer'),
+        (ADMIN, 'Admin')
+    ]
+    
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default=CUSTOMER)
     phone_number = models.CharField(max_length=15, unique=True)
     address = models.TextField()
     is_staff = models.BooleanField(default=False)
@@ -14,8 +22,32 @@ class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(null=True, blank=True)
     
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='custom_user_set',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups'
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='custom_user_set',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions'
+    )
+    
     def __str__(self):
         return self.username
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.user_type == self.ADMIN:
+            admin_group, created = Group.objects.get_or_create(name='Admin')
+            self.groups.add(admin_group)
+        elif self.user_type == self.CUSTOMER:
+            customer_group, created = Group.objects.get_or_create(name='Customer')
+            self.groups.add(customer_group)
 #2.
 class Equipment(models.Model):
     id = models.AutoField(primary_key=True)
