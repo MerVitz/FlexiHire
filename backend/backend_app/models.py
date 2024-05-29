@@ -56,7 +56,7 @@ class Payment(models.Model):
     def __str__(self):
         return f'Payment of {self.amount} for booking {self.booking.id}'
 #5.
-class Notication(models.Model):
+class Notification(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     message = models.TextField()
