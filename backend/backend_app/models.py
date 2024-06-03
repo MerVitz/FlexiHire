@@ -1,11 +1,31 @@
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group
 
 ##These are my models, they are 8 in number; Customuser, Equipment,
 ##Booking, Payment, Notification, Maintenance, Comment, Review,
 ## Any more that will bde added, ; MUST NOTE THE REASONS IN THE DOCUMENATION.
 
 #1.
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        
+        customer_group, created = Group.objects.get_or_create(name='Customer')
+        user.groups.add(customer_group)
+        user.save(using=self._db)
+        
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(email, password, **extra_fields)
 class CustomUser(AbstractUser):
     CUSTOMER = 'customer'
     ADMIN = 'admin'
@@ -14,13 +34,18 @@ class CustomUser(AbstractUser):
         (ADMIN, 'Admin')
     ]
     
+    username=None
+    email = models.EmailField(unique=True)
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default=CUSTOMER)
-    phone_number = models.CharField(max_length=15, unique=True)
-    address = models.TextField()
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(null=True, blank=True)
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+    
+    objects = CustomUserManager()
     
     groups = models.ManyToManyField(
         'auth.Group',
@@ -38,14 +63,16 @@ class CustomUser(AbstractUser):
     )
     
     def __str__(self):
-        return self.username
+        return self.email
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.user_type == self.ADMIN:
+            self.groups.clear()
             admin_group, created = Group.objects.get_or_create(name='Admin')
             self.groups.add(admin_group)
         elif self.user_type == self.CUSTOMER:
+            self.groups.clear()
             customer_group, created = Group.objects.get_or_create(name='Customer')
             self.groups.add(customer_group)
 #2.

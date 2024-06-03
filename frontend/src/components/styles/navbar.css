@@ -1,0 +1,50 @@
+/* styles/navbar.css */
+nav {
+    background-color: #0056b3; /* Primary color */
+    padding: 1rem;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  nav ul li {
+    display: inline;
+  }
+  
+  nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+  }
+  
+  nav ul li a:hover {
+    background-color: #ffcc00; /* Secondary color */
+    color: #0056b3;
+  }
+  
+  .auth-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .signup-button {
+    background-color: #ffcc00; /* Secondary color */
+    color: #0056b3;
+  }
+  
+  .signin-button {
+    background-color: #ff6600; /* Accent color */
+    color: #ffffff;
+  }
+  
+  .signup-button:hover, .signin-button:hover {
+    background-color: #ffffff;
+    color: #0056b3;
+  }

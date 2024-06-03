@@ -1,6 +1,13 @@
-from rest_framework import viewsets
-from .models import Review, Comment, Maintenance, Notification, Payment, Booking, Equipment,CustomUser
-from .serializers import ReviewSerializer,CustomUserSerializer,EquipmentSerializer,BookingSerializer, PaymentSerializer,NotificationSerializer,MaintenanceSerializer,CommentSerializer
+from rest_framework import generics, viewsets
+from rest_framework.response import Response
+
+from .models import (Booking, Comment, CustomUser, Equipment, Maintenance,
+                     Notification, Payment, Review)
+from .serializers import (BookingSerializer, CommentSerializer,
+                          CustomUserSerializer, EquipmentSerializer,
+                          MaintenanceSerializer, NotificationSerializer,
+                          PaymentSerializer, ReviewSerializer)
+
 
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
@@ -30,6 +37,18 @@ class EquipmentViewSet(viewsets.ModelViewSet):
     serializer_class = EquipmentSerializer
 
 class CustomUserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    
+    def create(self, request, *args, **kwargs):
+        # Ensure the user_type is not being set to 'admin' by a non-admin user
+        if 'user_type' in request.data and request.data['user_type'] == CustomUser.ADMIN:
+            if not request.user.is_staff:
+                return Response({'detail': 'Only admin users can create other admin users.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        return super().create(request, *args, **kwargs)
+    
+class UserCreate(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 

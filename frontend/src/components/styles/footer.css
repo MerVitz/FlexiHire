@@ -1,0 +1,94 @@
+/* styles/footer.css */
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 2rem 0;
+}
+
+.footer-subscribe {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.footer-subscribe h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-subscribe p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.subscribe-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.subscribe-form input {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px 0 0 4px;
+  width: 300px;
+}
+
+.subscribe-form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #ffcc00; /* Secondary color */
+  color: #333;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.gender-selection button {
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #ff6600; /* Accent color */
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+
+.footer-column {
+  width: 20%;
+}
+
+.footer-column h4 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.footer-column ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-column ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-column ul li a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  text-align: center;
+  border-top: 1px solid #444;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
