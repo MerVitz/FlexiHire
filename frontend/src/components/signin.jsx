@@ -1,14 +1,30 @@
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
+import axios from 'axios';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './styles/signin.css';
 
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add form submission logic here
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8000/api/login/', { email, password });
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user_type', response.data.user_type); // Store user type in local storage
+      if (response.data.user_type === 'admin') {
+        navigate('/admin-dashboard');
+      } else if (response.data.user_type === 'customer') {
+        navigate('/home');
+      }else{
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('There was an error logging in!', error);
+    }
   };
 
   return (

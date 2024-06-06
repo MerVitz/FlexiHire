@@ -1,5 +1,8 @@
-from rest_framework import generics, viewsets
+from django.contrib.auth import authenticate, login, logout
+from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import (Booking, Comment, CustomUser, Equipment, Maintenance,
                      Notification, Payment, Review)
@@ -12,6 +15,7 @@ from .serializers import (BookingSerializer, CommentSerializer,
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -47,11 +51,27 @@ class CustomUserViewSet(viewsets.ModelViewSet):
                 return Response({'detail': 'Only admin users can create other admin users.'}, status=status.HTTP_403_FORBIDDEN)
         
         return super().create(request, *args, **kwargs)
-    
+
 class UserCreate(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
+class LoginView(APIView):
+    def post(self, request, format=None):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            login(request, user)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'token': str(refresh.access_token),
+                'user_type': user.user_type,
+            }, status=status.HTTP_200_OK)
+        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
-
-# Create your views here.
+class LogoutView(APIView):
+    def post(self, request, format=None):
+        # Assuming JWT is managed client-side, simply return a success response
+        logout(request)
+        return Response(status=status.HTTP_200_OK)

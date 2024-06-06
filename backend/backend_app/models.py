@@ -101,7 +101,7 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Booking by {self.user.username} for {self.equipment.name}'    
+        return f'Booking by {self.user.username} for {self.equipment.name}'
 #4.
 class Payment(models.Model):
     id = models.AutoField(primary_key=True)

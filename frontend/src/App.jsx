@@ -1,7 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import Comment from './components/comment';
+import About from './components/About';
+import LandingPage from './components/LandingPage';
+import AdminDashboard from './components/admindashboard';
 import Footer from './components/footer';
 import Listings from './components/listings';
 import Navbar from './components/navbar';
@@ -14,22 +16,15 @@ function App() {
       <Routes>
         <Route path="/signup" element={<SignUpLayout />} />
         <Route path="/signin" element={<SignInLayout />} />
-        <Route path="/" element={<MainLayout />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/" element={<LandingPage />} />
       </Routes>
     </Router>
   );
 }
 
-function MainLayout() {
-  return (
-    <>
-      <Navbar />
-      <Listings />
-      <Comment />
-      <Footer />
-    </>
-  );
-}
 
 function SignUpLayout() {
   return (
@@ -46,6 +41,16 @@ function SignInLayout() {
     <>
       <Navbar />
       <SignIn />
+      <Footer />
+    </>
+  );
+}
+
+function Home() {
+  return (
+    <>
+      <Navbar />
+      <Listings />
       <Footer />
     </>
   );

@@ -1,0 +1,11 @@
+  /* styles/admindashboard.css */
+  .admin-dashboard {
+    display: flex;
+    margin-top: 60px; /* Adjust based on navbar height */
+  }
+  
+  .admin-content {
+    margin-left: 220px; /* Adjust this value based on sidebar width */
+    padding: 2rem;
+    width: calc(100% - 220px); /* Adjust based on sidebar width */
+  }

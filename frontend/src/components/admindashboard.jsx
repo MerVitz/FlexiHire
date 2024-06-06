@@ -1,14 +1,40 @@
+/* eslint-disable no-unused-vars */
+// src/components/AdminDashboard.jsx
+import React, { useState } from 'react';
+import AddEquipment from './AddEquipment';
+import AdminSidebar from './AdminSidebar';
+import Footer from './footer';
+import Navbar from './navbar';
+import './styles/admindashboard.css';
+
 function AdminDashboard() {
-    return(
-        <div>
-        <h1>Admin Dashboard</h1>
-        <h2>Manage Inventory</h2>
-        {/* Inventory management functionalities */}
-        <h2>Manage Bookings</h2>
-        {/* Booking management functionalities */}
-        <h2>User Management</h2>
-        {/* User management functionalities */}
+  const [selectedSection, setSelectedSection] = useState('addEquipment');
+
+  const renderSection = () => {
+    switch (selectedSection) {
+      case 'addEquipment':
+        return <AddEquipment />;
+      case 'viewEquipment':
+        return <div>View Equipment Section</div>;
+      // Add more cases for other sections
+      default:
+        return <div>Select a section from the sidebar.</div>;
+    }
+  };
+
+  return (
+    <>
+    <Navbar/>
+    <div className="admin-dashboard">
+      <AdminSidebar onSelect={setSelectedSection} />
+      <div className="admin-content">
+        {renderSection()}
       </div>
-    );
+    </div>
+    <Footer/>
+    </>
+
+  );
 }
+
 export default AdminDashboard;

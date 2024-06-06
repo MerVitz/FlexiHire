@@ -67,4 +67,11 @@
   .listings-container li p span.accent {
     color: #ff6600; /* Accent color */
   }
-  
+  .equipment-card{
+    background-color: #ffffff; /* White background for contrast */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 2rem auto;
+  }
