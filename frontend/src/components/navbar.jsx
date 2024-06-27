@@ -29,14 +29,17 @@ function Navbar() {
     localStorage.removeItem('user_type');
     setIsLoggedIn(false);
     setUserType(null);
-    navigate('/signin');
+    navigate('/');
   };
 
   return (
     <nav>
       <ul>
-        {!(isLoggedIn && userType === 'admin') && (
+        {!isLoggedIn && (
           <li><Link to="/">Home</Link></li>
+        )}
+        {isLoggedIn && (
+          <li><Link to="/home">Home</Link></li>
         )}
         <li><Link to="/about">About</Link></li>
         <li><Link to="/contact">Contact</Link></li>

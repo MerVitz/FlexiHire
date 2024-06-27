@@ -10,7 +10,7 @@ function AdminSidebar({ onSelect }) {
       <ul>
         <li><button onClick={() => onSelect('addEquipment')}>Add Equipment</button></li>
         <li><button onClick={() => onSelect('viewEquipment')}>View Equipment</button></li>
-        {/* Add more sidebar items here */}
+        {/* To add other sidebar components. */}
       </ul>
     </div>
   );

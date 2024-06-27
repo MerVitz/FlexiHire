@@ -2,6 +2,7 @@
 // src/components/AdminDashboard.jsx
 import React, { useState } from 'react';
 import AddEquipment from './AddEquipment';
+import ViewEquipment from './ViewEquipment'; // Import the new component
 import AdminSidebar from './AdminSidebar';
 import Footer from './footer';
 import Navbar from './navbar';
@@ -15,8 +16,7 @@ function AdminDashboard() {
       case 'addEquipment':
         return <AddEquipment />;
       case 'viewEquipment':
-        return <div>View Equipment Section</div>;
-      // Add more cases for other sections
+        return <ViewEquipment />; // Use the new component here
       default:
         return <div>Select a section from the sidebar.</div>;
     }
@@ -24,16 +24,15 @@ function AdminDashboard() {
 
   return (
     <>
-    <Navbar/>
-    <div className="admin-dashboard">
-      <AdminSidebar onSelect={setSelectedSection} />
-      <div className="admin-content">
-        {renderSection()}
+      <Navbar />
+      <div className="admin-dashboard">
+        <AdminSidebar onSelect={setSelectedSection} />
+        <div className="admin-content">
+          {renderSection()}
+        </div>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </>
-
   );
 }
 

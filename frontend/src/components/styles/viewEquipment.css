@@ -1,4 +1,4 @@
-.listings-container {
+.view-equipment-container {
   background-color: #ffffff; /* White background for contrast */
   padding: 2rem;
   border-radius: 8px;
@@ -7,14 +7,14 @@
   margin: 2rem auto;
 }
 
-.listings-container h2 {
+.view-equipment-container h2 {
   color: #0056b3; /* Primary color */
   text-align: center;
   margin-bottom: 2rem;
   font-size: 2rem;
 }
 
-.listings {
+.view-equipment-listings {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
@@ -28,6 +28,7 @@
   padding: 1rem;
   width: 300px; /* Fixed width for consistent sizing */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative; /* Make the position relative for absolute positioning of the edit button */
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -58,4 +59,18 @@
 .equipment-card p span {
   font-weight: bold;
   color: #ffcc00; /* Secondary color */
+}
+
+.edit-button {
+  position: absolute;
+  bottom: 10px; /* Position at the bottom */
+  right: 10px; /* Position at the right */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.edit-button .bx {
+  font-size: 24px;
+  color: #333; /* Adjust the color as needed */
 }

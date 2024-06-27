@@ -40,7 +40,7 @@ Backend– Django(Python Framework)
 
 
 Challenge Statement
-FlexiHire app, intends to solve this challenges; 
+FlexiHire app, intends to solve this challenges;
 
 Difficulties of booking process.
 Administrative challenges
