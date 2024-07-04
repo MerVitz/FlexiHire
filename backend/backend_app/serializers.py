@@ -3,7 +3,20 @@ from rest_framework import serializers
 from .models import (Booking, Comment, CustomUser, Equipment, Maintenance,
                      Notification, Payment, Review)
 
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id','email', 'password', 'first_name', 'last_name')
+        extra_kwargs = {'password': {'write_only': True}}
 
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(
+            email=validated_data['email'],
+            password=validated_data['password'],
+            first_name=validated_data.get('first_name'),
+            last_name=validated_data.get('last_name')
+        )
+        return user
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
@@ -34,12 +47,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = '__all__'
-
-class BookingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Booking
-        fields = '__all__'
-
+        
 class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipment
@@ -58,17 +66,23 @@ class EquipmentSerializer(serializers.ModelSerializer):
             instance.image = image
         return super().update(instance, validated_data)
 
-class CustomUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ('email', 'password', 'first_name', 'last_name')
-        extra_kwargs = {'password': {'write_only': True}}
+class BookingCreateUpdateSerializer(serializers.ModelSerializer):
+    equipment = serializers.PrimaryKeyRelatedField(queryset=Equipment.objects.all())
+    user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
 
-    def create(self, validated_data):
-        user = CustomUser.objects.create_user(
-            email=validated_data['email'],
-            password=validated_data['password'],
-            first_name=validated_data.get('first_name'),
-            last_name=validated_data.get('last_name')
-        )
-        return user
+    class Meta:
+        model = Booking
+        fields = '__all__'
+
+class BookingRetrieveSerializer(serializers.ModelSerializer):
+    equipment = EquipmentSerializer()
+    user = CustomUserSerializer()
+
+    class Meta:
+        model = Booking
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+        instance.is_confirmed = validated_data.get('is_confirmed', instance.is_confirmed)
+        instance.save()
+        return instance

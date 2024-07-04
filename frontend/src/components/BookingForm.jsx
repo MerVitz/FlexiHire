@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
 // src/components/BookingForm.jsx
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -15,7 +15,11 @@ const BookingForm = ({ equipmentId, onClose }) => {
     useEffect(() => {
         const storedUserId = localStorage.getItem('user_id');
         if (storedUserId) {
-            setUserId(parseInt(storedUserId));
+            const parsedUserId = parseInt(storedUserId);
+            setUserId(parsedUserId);
+            console.log('Fetched user ID:', parsedUserId);
+        } else {
+            console.error('No user ID found in localStorage.');
         }
     }, []);
 

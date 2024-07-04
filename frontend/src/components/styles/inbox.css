@@ -1,0 +1,36 @@
+/* src/components/styles/inbox.css */
+.inbox {
+    padding: 20px;
+  }
+  
+  .inbox h2 {
+    margin-bottom: 20px;
+  }
+  
+  .inbox ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .inbox ul li {
+    background: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .inbox ul li button {
+    background-color: #ff6600; /* Primary color */
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .inbox ul li button:hover {
+    background-color: #ffcc00; /* Secondary color */
+    color: #ff6600;
+  }
+  

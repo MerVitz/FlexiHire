@@ -121,6 +121,7 @@ class Payment(models.Model):
 # 5. Notification model
 class Notification(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name='notifications')
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)

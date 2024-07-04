@@ -17,6 +17,7 @@ function SignIn() {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user_id', response.data.user_id); // Ensure user ID is stored correctly
       localStorage.setItem('user_type', response.data.user_type);
+      console.log('Log is  successful, this is the id of the user;', response.data.user_id)
       if (response.data.user_type === 'admin') {
         navigate('/admin-dashboard');
       } else if (response.data.user_type === 'customer') {

@@ -1,12 +1,15 @@
+# views.py
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 
 from .models import (Booking, Comment, CustomUser, Equipment, Maintenance,
                      Notification, Payment, Review)
-from .serializers import (BookingSerializer, CommentSerializer,
+from .serializers import (BookingCreateUpdateSerializer, BookingRetrieveSerializer, CommentSerializer,
                           CustomUserSerializer, EquipmentSerializer,
                           MaintenanceSerializer, NotificationSerializer,
                           PaymentSerializer, ReviewSerializer)
@@ -27,6 +30,10 @@ class MaintenanceViewSet(viewsets.ModelViewSet):
 class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user)
 
 class NotificationConfirmView(generics.UpdateAPIView):
     queryset = Notification.objects.all()
@@ -39,9 +46,17 @@ class NotificationConfirmView(generics.UpdateAPIView):
 
         # Update related booking status if required
         if instance.requires_confirmation:
-            booking = Booking.objects.get(notification=instance)
+            booking = instance.booking
             booking.is_confirmed = True
             booking.save()
+
+            # Notify user that booking is confirmed
+            Notification.objects.create(
+                user=booking.user,
+                booking=booking,
+                message=f"Your booking for {booking.equipment.name} from {booking.start_time} to {booking.end_time} has been successful.",
+                requires_confirmation=False
+            )
 
         return Response({'status': 'notification confirmed'})
 
@@ -50,12 +65,15 @@ class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
 
 class BookingViewSet(viewsets.ModelViewSet):
-    queryset = Booking.objects.all()
-    serializer_class = BookingSerializer
+    queryset = Booking.objects.select_related('equipment', 'user').all()
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return BookingRetrieveSerializer
+        return BookingCreateUpdateSerializer
 
     def create(self, request, *args, **kwargs):
-        data = request.data.copy()  # Make the data mutable
-        serializer = self.get_serializer(data=data)
+        serializer = self.get_serializer(data=request.data)
         try:
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
@@ -64,11 +82,14 @@ class BookingViewSet(viewsets.ModelViewSet):
             booking = serializer.instance
 
             # Notify admin for confirmation
-            Notification.objects.create(
-                user=booking.user,
-                message=f"Booking request for {booking.equipment.name} from {booking.start_time} to {booking.end_time}.",
-                requires_confirmation=True
-            )
+            admin_users = CustomUser.objects.filter(user_type=CustomUser.ADMIN)
+            for admin in admin_users:
+                Notification.objects.create(
+                    user=admin,
+                    booking=booking,
+                    message=f"Booking request for {booking.equipment.name} from {booking.start_time} to {booking.end_time}.",
+                    requires_confirmation=True
+                )
 
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         
@@ -76,6 +97,22 @@ class BookingViewSet(viewsets.ModelViewSet):
             print(f"Error during booking creation: {e}")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=True, methods=['put'])
+    def confirm(self, request, pk=None):
+        booking = self.get_object()
+        booking.is_confirmed = True
+        booking.save()
+
+        # Notify user that booking is confirmed
+        Notification.objects.create(
+            user=booking.user,
+            booking=booking,
+            message=f"Your booking for {booking.equipment.name} from {booking.start_time} to {booking.end_time} has been confirmed.",
+            requires_confirmation=False
+        )
+
+        serializer = self.get_serializer(booking)
+        return Response(serializer.data)
 
 class EquipmentViewSet(viewsets.ModelViewSet):
     queryset = Equipment.objects.all()
@@ -127,6 +164,7 @@ class LoginView(APIView):
             refresh = RefreshToken.for_user(user)
             return Response({
                 'token': str(refresh.access_token),
+                'user_id': user.id,
                 'user_type': user.user_type,
             }, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)

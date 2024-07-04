@@ -1,4 +1,5 @@
-// eslint-disable-next-line no-unused-vars
+// src/App.jsx
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import About from './components/About';
@@ -9,6 +10,7 @@ import Listings from './components/listings';
 import Navbar from './components/navbar';
 import SignIn from './components/signin';
 import SignUp from './components/signup';
+import Inbox from './components/Inbox';
 
 function App() {
   return (
@@ -19,12 +21,12 @@ function App() {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/inbox" element={<Inbox />} />
         <Route path="/" element={<LandingPage />} />
       </Routes>
     </Router>
   );
 }
-
 
 function SignUpLayout() {
   return (
