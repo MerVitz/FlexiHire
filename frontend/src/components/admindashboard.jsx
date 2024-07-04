@@ -2,7 +2,9 @@
 // src/components/AdminDashboard.jsx
 import React, { useState } from 'react';
 import AddEquipment from './AddEquipment';
-import ViewEquipment from './ViewEquipment'; // Import the new component
+import ViewEquipment from './ViewEquipment';
+import ManageBookings from './ManageBookings';
+import Notifications from './Notifications';
 import AdminSidebar from './AdminSidebar';
 import Footer from './footer';
 import Navbar from './navbar';
@@ -16,7 +18,11 @@ function AdminDashboard() {
       case 'addEquipment':
         return <AddEquipment />;
       case 'viewEquipment':
-        return <ViewEquipment />; // Use the new component here
+        return <ViewEquipment />;
+      case 'manageBookings':
+        return <ManageBookings />;
+      case 'manageNotifications':
+        return <Notifications />;
       default:
         return <div>Select a section from the sidebar.</div>;
     }

@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+// src/components/SignIn.jsx
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,12 +15,13 @@ function SignIn() {
     try {
       const response = await axios.post('http://localhost:8000/api/login/', { email, password });
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user_type', response.data.user_type); // Store user type in local storage
+      localStorage.setItem('user_id', response.data.user_id); // Ensure user ID is stored correctly
+      localStorage.setItem('user_type', response.data.user_type);
       if (response.data.user_type === 'admin') {
         navigate('/admin-dashboard');
       } else if (response.data.user_type === 'customer') {
         navigate('/home');
-      }else{
+      } else {
         navigate('/');
       }
     } catch (error) {

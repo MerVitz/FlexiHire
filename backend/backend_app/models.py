@@ -5,7 +5,10 @@ from django.db import models
 ##Booking, Payment, Notification, Maintenance, Comment, Review,
 ## Any more that will bde added, ; MUST NOTE THE REASONS IN THE DOCUMENATION.
 
-#1.
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
+from django.db import models
+
+# 1. CustomUser and CustomUserManager
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -26,6 +29,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
 
         return self.create_user(email, password, **extra_fields)
+
 class CustomUser(AbstractUser):
     CUSTOMER = 'customer'
     ADMIN = 'admin'
@@ -75,7 +79,8 @@ class CustomUser(AbstractUser):
             self.groups.clear()
             customer_group, created = Group.objects.get_or_create(name='Customer')
             self.groups.add(customer_group)
-#2.
+
+# 2. Equipment model
 class Equipment(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -88,21 +93,19 @@ class Equipment(models.Model):
 
     def __str__(self):
         return self.name
-    
-#3.
+
+# 3. Booking model
 class Booking(models.Model):
-    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    status = models.CharField(max_length=50)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    is_confirmed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'Booking by {self.user.username} for {self.equipment.name}'
-#4.
+        return f"{self.user.email} - {self.equipment.name}"
+
+# 4. Payment model
 class Payment(models.Model):
     id = models.AutoField(primary_key=True)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
@@ -114,17 +117,20 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'Payment of {self.amount} for booking {self.booking.id}'
-#5.
+
+# 5. Notification model
 class Notification(models.Model):
-    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     message = models.TextField()
-    read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    requires_confirmation = models.BooleanField(default=False)
+    confirmed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'Notification for {self.user.username}'
-#6.
+        return f"Notification for {self.user.email}"
+
+# 6. Maintenance model
 class Maintenance(models.Model):
     id = models.AutoField(primary_key=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
@@ -135,7 +141,8 @@ class Maintenance(models.Model):
 
     def __str__(self):
         return f'Maintenance for {self.equipment.name}'
-#7.
+
+# 7. Comment model
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -144,8 +151,9 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Comment by {self.user.username} on {self.equipment.name}'
-#8.
+        return f'Comment by {self.user.email} on {self.equipment.name}'
+
+# 8. Review model
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -155,4 +163,4 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Review by {self.user.username} on {self.equipment.name} with rating {self.rating}'
+        return f'Review by {self.user.email} on {self.equipment.name} with rating {self.rating}'

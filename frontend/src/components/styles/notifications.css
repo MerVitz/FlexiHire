@@ -1,0 +1,36 @@
+/* styles/notifications.css */
+.notifications-container {
+    padding: 20px;
+}
+
+.notifications-container h2 {
+    margin-bottom: 20px;
+}
+
+.notifications-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.notifications-container .notification {
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.notifications-container .notification.confirm {
+    background: #ffeeba;
+    border-color: #ffc107;
+}
+
+.notifications-container .notification button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

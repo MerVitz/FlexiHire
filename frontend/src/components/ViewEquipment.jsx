@@ -2,10 +2,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import 'boxicons';
+import EditEquipmentForm from './EditEquipmentForm';
 import './styles/viewEquipment.css';
 
 function Listings() {
   const [equipments, setEquipments] = useState([]);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [currentEquipment, setCurrentEquipment] = useState(null);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/equipment/')
@@ -19,7 +22,23 @@ function Listings() {
 
   const handleEdit = (equipmentId) => {
     console.log(`Edit equipment with ID: ${equipmentId}`);
+    const selectedEquipment = equipments.find(equipment => equipment.id === equipmentId);
+    setCurrentEquipment(selectedEquipment);
+    setIsEditFormOpen(true);
   };
+
+  const handleUpdate = (updatedEquipment) =>{
+    setEquipments((prevEquipments) =>
+      prevEquipments.map((equipment) =>
+        equipment.id === updatedEquipment.id ? updatedEquipment:equipment
+  ));
+  }
+
+
+  const handleCloseEditForm = () => {
+    setIsEditFormOpen(false);
+    setCurrentEquipment(null);
+  }
 
   return (
     <div className="listings-container">
@@ -39,6 +58,13 @@ function Listings() {
           </div>
         ))}
       </div>
+        {isEditFormOpen &&(
+          <EditEquipmentForm
+              equipment={currentEquipment}
+              onClose={handleCloseEditForm}
+              onUpdate={handleUpdate}
+              />
+        )}
     </div>
   );
 }

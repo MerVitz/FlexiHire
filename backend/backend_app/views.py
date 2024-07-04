@@ -28,6 +28,23 @@ class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
 
+class NotificationConfirmView(generics.UpdateAPIView):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.confirmed = True
+        instance.save()
+
+        # Update related booking status if required
+        if instance.requires_confirmation:
+            booking = Booking.objects.get(notification=instance)
+            booking.is_confirmed = True
+            booking.save()
+
+        return Response({'status': 'notification confirmed'})
+
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
@@ -36,9 +53,53 @@ class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
 
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()  # Make the data mutable
+        serializer = self.get_serializer(data=data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            
+            booking = serializer.instance
+
+            # Notify admin for confirmation
+            Notification.objects.create(
+                user=booking.user,
+                message=f"Booking request for {booking.equipment.name} from {booking.start_time} to {booking.end_time}.",
+                requires_confirmation=True
+            )
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        
+        except Exception as e:
+            print(f"Error during booking creation: {e}")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class EquipmentViewSet(viewsets.ModelViewSet):
     queryset = Equipment.objects.all()
     serializer_class = EquipmentSerializer
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        
+        # Converting dictionary to mutable
+        data = request.data.copy()
+        
+        # If image is not in the request data, set it to the existing image
+        if 'image' not in data:
+            data['image'] = instance.image
+
+        serializer = self.get_serializer(instance, data=data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()

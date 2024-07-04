@@ -1,0 +1,81 @@
+/* Add these styles to your CSS file */
+
+.edit-form-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-form-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 100%;
+  position: relative;
+}
+
+.edit-form-container h2 {
+  margin-top: 0;
+}
+
+.edit-form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-form-container label {
+  margin-bottom: 10px;
+}
+
+.edit-form-container input,
+.edit-form-container select {
+  margin-top: 5px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.edit-form-container button {
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-form-container button[type="submit"] {
+  background: #28a745;
+  color: white;
+}
+
+.edit-form-container button[type="button"] {
+  background: #dc3545;
+  color: white;
+}
+
+.current-image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.current-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.current-image-preview {
+  width: 50px; /* Adjust size as needed */
+  height: auto;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

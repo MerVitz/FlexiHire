@@ -24,6 +24,12 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = '__all__'
 
+    def update(self, instance, validated_data):
+        image = validated_data.pop('image', None)
+        if image is not None:
+            instance.image = image
+        return super().update(instance, validated_data)
+
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
@@ -38,6 +44,19 @@ class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipment
         fields = '__all__'
+
+    def validate_price_per_day(self, value):
+        try:
+            value = float(value)
+        except ValueError:
+            raise serializers.ValidationError("Price per day must be a float.")
+        return value
+
+    def update(self, instance, validated_data):
+        image = validated_data.pop('image', None)
+        if image is not None:
+            instance.image = image
+        return super().update(instance, validated_data)
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:

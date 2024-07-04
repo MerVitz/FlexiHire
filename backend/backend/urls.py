@@ -5,6 +5,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from backend_app import views
 
+# Register viewsets with the router
 router = DefaultRouter()
 router.register(r'reviews', views.ReviewViewSet)
 router.register(r'comments', views.CommentViewSet)
@@ -18,8 +19,10 @@ router.register(r'users', views.CustomUserViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/notifications/<int:pk>/confirm/', views.NotificationConfirmView.as_view(), name='notification-confirm'),
     path('api/', include('backend_app.urls')),
 ]
 
+# Serve media files during development
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
