@@ -1,3 +1,4 @@
+// vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -8,7 +9,6 @@ export default defineConfig({
     rollupOptions : {
       input :{
         main: 'index.html',
-        notFound: '404.html'
       }
     }
   }
