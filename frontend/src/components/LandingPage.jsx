@@ -1,9 +1,86 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Slider from "react-slick";
 import './styles/landingPage.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const LandingPage = () => {
+
+  const NextArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <div className="custom-arrow next-arrow" onClick={onClick}>
+        ➡
+      </div>
+    );
+  };
+
+  const PrevArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <div className="custom-arrow prev-arrow" onClick={onClick}>
+        ⬅
+      </div>
+    );
+  };
+
+const featureSlides = [
+  {
+    title: "Easy Booking",
+    description: "Book vehicles and equipment with just a few clicks."
+  },
+  {
+    title: "Team Booking",
+    description: "Book a set of items for your team events and activities."
+  },
+  {
+    title: "Rate and Comment",
+    description: "Provide feedback and rate our services to help us improve."
+  }
+];
+
+const featureSettings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  nextArrow: <NextArrow />,
+  prevArrow: <PrevArrow />,
+};
+
+
+  const slides = [
+    {
+      image: "/assets/skate1.png",
+      title: "Explore the Best Skates",
+      description: "Find the best skateboards and gear for your skating adventures."
+    },
+    {
+      image: "/assets/skate2.png",
+      title: "Skateboards Adventure",
+      description: "Hire the best skateboards and gear for your skating adventures."
+    },
+    {
+      image: "/assets/skate3.png",
+      title: "Ride Your Way",
+      description: "Hire mountain bikes for leisure with ease."
+    }
+  ];
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000
+  };
+
+
   return (
     <div className="landing-page">
       <header className="header">
@@ -20,15 +97,35 @@ const LandingPage = () => {
           </nav>
         </div>
       </header>
+
+      {/* Hero Section with Carousel */}
       <section className="hero">
-        <div className="hero-content">
-          <h1>Welcome to FlexiHire</h1>
-          <p>Your one-stop solution for hiring vehicles and equipment.</p>
-          <button className="button-link">
-            <Link to="/signup" className="link-text">Get Started</Link>
-          </button>
-        </div>
+        <Slider {...settings}>
+        {slides.map((slide, index) => (
+          <div key={index}>
+            <div 
+              className="hero-slide" 
+              style={{ 
+                backgroundImage: `url(${slide.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                height: '50vh'
+              }}
+            >
+              <div className="hero-content">
+                <h1>{slide.title}</h1>
+                <p>{slide.description}</p>
+                <button className="button-link">
+                  <Link to="/signup" className="link-text">Get Started</Link>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+        </Slider>
+{/* This is a section  for an add. */}
       </section>
+
       <section className="services">
         <div className="service-item">
         <div className="service-image">
@@ -59,23 +156,24 @@ const LandingPage = () => {
 
         </div>
       </section>
+
+
+      {/* Features Section with Carousel */}
       <section className="features">
         <h2>Our Features</h2>
-        <div className="feature-list">
-          <div className="feature-item">
-            <h3>Easy Booking</h3>
-            <p>Book vehicles and equipment with just a few clicks.</p>
-          </div>
-          <div className="feature-item">
-            <h3>Team Booking</h3>
-            <p>Book a set of items for your team events and activities.</p>
-          </div>
-          <div className="feature-item">
-            <h3>Rate and Comment</h3>
-            <p>Provide feedback and rate our services to help us improve.</p>
-          </div>
-        </div>
+        <Slider {...featureSettings}>
+          {featureSlides.map((slide, index) => (
+            <div key={index} className="feature-slide">
+              <div className="feature-item">
+                <h3>{slide.title}</h3>
+                <p>{slide.description}</p>
+              </div>
+            </div>
+          ))}
+        </Slider>
       </section>
+
+
       <footer className="footer">
       <div className="footer-subscribe">
         <h3>NEW TO FLEXIHIRE?</h3>

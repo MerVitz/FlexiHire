@@ -1,234 +1,304 @@
-/* Add your styles here */
+/* General Styles */
+html, body {
+  height: 100%;
+  overflow: hidden; /* Disable the scrollbar on the body */
+}
 
 .landing-page {
-    font-family: Arial, sans-serif;
-  }
-  
-  .header {
-    background-color: #fff;
-    padding: 10px 0;
-    text-align: center;
-  }
-  
-  .navbar-container {
-    display: flex;
-    justify-content: center; /* Center the navbar horizontally */
-  }
-  
-  .navbar {
-    background-color: #ff6600;
-    border-radius: 25px;
-    padding: 10px 20px;
-  }
-  
-  .navbar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .navbar li {
-    margin: 0 15px;
-  }
-  
-  .navbar a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  .hero {
-    background-color: #e9ecef;
-    padding: 50px 20px;
-    text-align: center;
-  }
-  
-  .hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-y: auto; /* Allow vertical scrolling */
+  scrollbar-width: none; /* Hide scrollbar on Firefox */
+}
+
+/* Hide scrollbar in Webkit-based browsers (Chrome, Safari, etc.) */
+.landing-page::-webkit-scrollbar {
+  display: none;
+}
+
+/* Header */
+.header {
+  background-color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+/* Navbar Container */
+.navbar-container {
+  display: flex;
+  justify-content: center; /* Center the navbar horizontally */
+}
+
+/* Navbar */
+.navbar {
+  background-color: #ff6600;
+  border-radius: 25px;
+  padding: 10px 20px;
+}
+
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar li {
+  margin: 0 15px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Hero Section */
+.hero {
+  background-color: #e9ecef;
+  margin-top: 120px; /* Increase space between the header and the hero section */
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  height: 60vh; /* Set height for hero section */
+}
+
+/* Hero Slide */
+.hero-slide {
+  position: relative;
+  width: 100%;
+  height: 100%; /* Ensure the slide fills the hero section */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-size: cover; /* Cover the full area */
+  background-position: center;
+  background-repeat: no-repeat; /* No background repeat */
+}
+
+/* Hero Content */
+.hero-content {
+  max-width: 60%;
+  margin: auto;
+  background: rgba(0, 0, 0, 0.6); /* Dark overlay for visibility */
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+}
+
+/* Hero Button */
+.hero button {
+  padding: 12px 12px;
+  font-size: 1.2em;
+  color: white;
+  background-color: #ffcc007c;
+  border: none;
+  border-radius: 5px;
+}
+
+.button-link {
+  padding: 10px 20px;
+  background-color: #FFC107;
+  color: #000;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2em; /* Button text size */
+}
+
+.button-link .link-text {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Services Section */
+.services {
+  padding: 50px 20px;
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.service-item:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.service-text, .service-image {
+  flex: 1;
+  padding: 20px;
+}
+
+.service-text h3 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.service-text p {
+  font-size: 1em;
+}
+
+.service-image img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+/* Features Section */
+.features {
+  padding: 50px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.feature-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.feature-item {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.feature-item h3 {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+}
+
+.feature-item p {
+  font-size: 1.2em;
+}
+
+/* Carousel Arrows */
+.custom-arrow {
+  font-size: 2em;
+  color: #ff6600;
+  padding: 10px;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.next-arrow {
+  right: 20px;
+}
+
+.prev-arrow {
+  left: 20px;
+}
+
+/* Footer Section */
+.footer {
+  background-color: #905a358e;
+  color: #fff;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-subscribe {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.footer-subscribe h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-subscribe p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.subscribe-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.subscribe-form input {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px 0 0 4px;
+  width: 300px;
+}
+
+.subscribe-form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #ffcc00;
+  color: #333;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
   .hero h1 {
     font-size: 2.5em;
-    margin-bottom: 20px;
   }
-  
+
   .hero p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
-  }
-  
-  .hero button {
-    padding: 10px 20px;
-    font-size: 1em;
-    color: white;
-    background-color: #ffcc007c;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  /* Additional styling for link text inside the button */
-  .button-link .link-text {
-    color: black; /* Change the text color to black */
-    text-decoration: none;
-  }
-  
-  .services {
-    padding: 50px 20px;
-  }
-  
-  .service-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 30px;
-  }
-  
-  .service-item:nth-child(even) {
-    flex-direction: row-reverse;
-  }
-  
-  .service-text, .service-image {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  .service-text h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-  
-  .service-text p {
     font-size: 1em;
   }
-  
-  .service-image img {
-    max-width: 100%;
-    border-radius: 10px;
+
+  .hero-content {
+    max-width: 80%;
+    padding: 15px;
   }
-  
-  .features {
-    padding: 50px 20px;
-    text-align: center;
+
+  .button-link {
+    font-size: 1em;
+    padding: 8px 15px;
   }
-  
-  .features h2 {
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
     font-size: 2em;
-    margin-bottom: 30px;
   }
-  
-  .feature-list {
-    display: flex;
-    justify-content: center;
+
+  .hero p {
+    font-size: 0.9em;
   }
-  
-  .feature-item {
-    max-width: 200px;
-    margin: 0 20px;
-    text-align: left;
+
+  .hero-content {
+    max-width: 90%;
+    padding: 10px;
   }
-  
-  .feature-item h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
+
+  .button-link {
+    font-size: 0.9em;
+    padding: 7px 10px;
   }
-  
-  .footer {
-    background-color: #905a358e;
-    color: #fff;
-    padding: 2rem 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .footer-subscribe {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  .footer-subscribe h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .footer-subscribe p {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .subscribe-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  
-  .subscribe-form input {
-    padding: 0.5rem;
-    border: none;
-    border-radius: 4px 0 0 4px;
-    width: 300px;
-  }
-  
-  .subscribe-form button {
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: #ffcc00;
-    color: #333;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-  }
-  
-  .gender-selection button {
-    margin: 0 0.5rem;
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: #ff6600;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .footer-links {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin-bottom: 2rem;
-  }
-  
-  .footer-column {
-    width: 20%;
-  }
-  
-  .footer-column h4 {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .footer-column ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .footer-column ul li {
-    margin-bottom: 0.5rem;
-  }
-  
-  .footer-column ul li a {
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  .footer-column ul li a:hover {
-    text-decoration: underline;
-  }
-  
-  .footer-bottom {
-    text-align: center;
-    border-top: 1px solid #444;
-    padding-top: 1rem;
-    margin-top: 1rem;
-  }
-  
+}
