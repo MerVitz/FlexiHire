@@ -6,11 +6,4 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: 'FlexiHire/',
   plugins: [react()],
-  build: {
-    rollupOptions : {
-      input :{
-        main: 'index.html',
-      }
-    }
-  }
 });
