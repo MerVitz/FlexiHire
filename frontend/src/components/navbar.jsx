@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './styles/navbar.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,55 +46,79 @@ function Navbar() {
   };
 
   return (
-    <nav>
-      <ul>
-        {!isLoggedIn && (
-          <li><Link to="/">Home</Link></li>
-        )}
-        {isLoggedIn && (
-          <li><Link to="/home">Home</Link></li>
-        )}
-        <li><Link to="/about">About</Link></li>
-        <li><Link to="/contact">Contact</Link></li>
-        {isLoggedIn && userType !== 'admin' && (
-          <>
-            <li className="dropdown">
-              <button className="dropdown-toggle">Notifications</button>
-              <div className="dropdown-menu">
-                {notifications.length === 0 ? (
-                  <p>No new notifications</p>
-                ) : (
-                  notifications.map((notification) => (
-                    <div key={notification.id} className="dropdown-item">
-                      {notification.message}
-                    </div>
-                  ))
-                )}
-              </div>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+      <div className="container">
+        <Link className="navbar-brand" to="/">FlexiHire</Link>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            {!isLoggedIn && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/">Home</Link>
+              </li>
+            )}
+            {isLoggedIn && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/home">Home</Link>
+              </li>
+            )}
+            <li className="nav-item">
+              <Link className="nav-link" to="/about">About</Link>
             </li>
-            <li className="dropdown">
-              <button className="dropdown-toggle">Profile</button>
-              <div className="dropdown-menu">
-                <Link to="/inbox" className="dropdown-item">Inbox</Link>
-              </div>
+            <li className="nav-item">
+              <Link className="nav-link" to="/contact">Contact</Link>
             </li>
-          </>
-        )}
-        {isLoggedIn && userType === 'admin' && (
-          <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
-        )}
-        {isLoggedIn && (
-          <>
-            <li><button onClick={handleLogout} className="logout-button">Logout</button></li>
-          </>
-        )}
-        {!isLoggedIn && (
-          <li className="auth-buttons">
-            <Link to="/signup" className="signup-button">Sign Up</Link>
-            <Link to="/signin" className="signin-button">Sign In</Link>
-          </li>
-        )}
-      </ul>
+            {isLoggedIn && userType !== 'admin' && (
+              <>
+                <li className="nav-item dropdown">
+                  <a className="nav-link dropdown-toggle" href="/" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Notifications
+                  </a>
+                  <ul className="dropdown-menu" aria-labelledby="notificationDropdown">
+                    {notifications.length === 0 ? (
+                      <li className="dropdown-item">No new notifications</li>
+                    ) : (
+                      notifications.map((notification) => (
+                        <li key={notification.id} className="dropdown-item">
+                          {notification.message}
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                </li>
+                <li className="nav-item dropdown">
+                  <a className="nav-link dropdown-toggle" href="/" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Profile
+                  </a>
+                  <ul className="dropdown-menu" aria-labelledby="profileDropdown">
+                    <li>
+                      <Link className="dropdown-item" to="/inbox">Inbox</Link>
+                    </li>
+                  </ul>
+                </li>
+              </>
+            )}
+            {isLoggedIn && userType === 'admin' && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/admin-dashboard">Admin Dashboard</Link>
+              </li>
+            )}
+            {isLoggedIn && (
+              <li className="nav-item">
+                <button onClick={handleLogout} className="btn btn-outline-light">Logout</button>
+              </li>
+            )}
+            {!isLoggedIn && (
+              <li className="nav-item d-flex">
+                <Link className="btn btn-warning me-2" to="/signup">Sign Up</Link>
+                <Link className="btn btn-light" to="/signin">Sign In</Link>
+              </li>
+            )}
+          </ul>
+        </div>
+      </div>
     </nav>
   );
 }

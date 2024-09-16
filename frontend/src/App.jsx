@@ -11,6 +11,7 @@ import Navbar from './components/navbar';
 import SignIn from './components/signin';
 import SignUp from './components/signup';
 import Inbox from './components/Inbox';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

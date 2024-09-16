@@ -1,21 +1,4 @@
-/* General Styles */
-html, body {
-  height: 100%;
-  overflow: hidden; /* Disable the scrollbar on the body */
-}
 
-.landing-page {
-  font-family: Arial, sans-serif;
-  height: 100vh;
-  overflow-x: hidden; /* Prevent horizontal scroll */
-  overflow-y: auto; /* Allow vertical scrolling */
-  scrollbar-width: none; /* Hide scrollbar on Firefox */
-}
-
-/* Hide scrollbar in Webkit-based browsers (Chrome, Safari, etc.) */
-.landing-page::-webkit-scrollbar {
-  display: none;
-}
 
 /* Header */
 .header {
