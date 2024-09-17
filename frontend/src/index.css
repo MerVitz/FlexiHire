@@ -1,0 +1,8 @@
+/* Hide the scrollbar keeping functionality */
+body::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for firefrox */
+html {
+  scrollbar-width: none;
+}

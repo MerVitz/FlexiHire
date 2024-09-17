@@ -12,6 +12,8 @@ import SignIn from './components/signin';
 import SignUp from './components/signup';
 import Inbox from './components/Inbox';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 
 function App() {
   return (

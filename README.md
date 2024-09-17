@@ -15,8 +15,8 @@ The application will provide a seamless user interface to help customers book an
 - Administrators/staff responsible for managing the inventory
 
 **Included Features:**
-- User Registration
-- User Authentication
+- User Registration --Done.
+- User Authentication 
 - Vehicle and Equipment Browsing
 - Booking System
 - Booking Management

@@ -1,14 +1,15 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +46,18 @@ function Navbar() {
     navigate('/');
   };
 
+  // Toggle the Notification Dropdown
+  const toggleNotificationDropdown = () => {
+    setIsNotificationDropdownOpen(!isNotificationDropdownOpen);
+    setIsProfileDropdownOpen(false);
+  };
+
+  // Toggle the Profile Dropdown
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+    setIsNotificationDropdownOpen(false);
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
       <div className="container">
@@ -70,36 +83,51 @@ function Navbar() {
             <li className="nav-item">
               <Link className="nav-link" to="/contact">Contact</Link>
             </li>
+
             {isLoggedIn && userType !== 'admin' && (
               <>
                 <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" href="/" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <a 
+                    className="nav-link dropdown-toggle btn btn-link" 
+                    onClick={toggleNotificationDropdown}
+                    aria-expanded={isNotificationDropdownOpen}
+                  >
                     Notifications
                   </a>
-                  <ul className="dropdown-menu" aria-labelledby="notificationDropdown">
-                    {notifications.length === 0 ? (
-                      <li className="dropdown-item">No new notifications</li>
-                    ) : (
-                      notifications.map((notification) => (
-                        <li key={notification.id} className="dropdown-item">
-                          {notification.message}
-                        </li>
-                      ))
-                    )}
-                  </ul>
+                  {isNotificationDropdownOpen && (
+                    <ul className="dropdown-menu show">
+                      {notifications.length === 0 ? (
+                        <li className="dropdown-item">No new notifications</li>
+                      ) : (
+                        notifications.map((notification) => (
+                          <li key={notification.id} className="dropdown-item">
+                            {notification.message}
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  )}
                 </li>
+
                 <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" href="/" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <a 
+                    className="nav-link dropdown-toggle btn btn-link" 
+                    onClick={toggleProfileDropdown}
+                    aria-expanded={isProfileDropdownOpen}
+                  >
                     Profile
                   </a>
-                  <ul className="dropdown-menu" aria-labelledby="profileDropdown">
-                    <li>
-                      <Link className="dropdown-item" to="/inbox">Inbox</Link>
-                    </li>
-                  </ul>
+                  {isProfileDropdownOpen && (
+                    <ul className="dropdown-menu show">
+                      <li>
+                        <Link className="dropdown-item" to="/inbox">Inbox</Link>
+                      </li>
+                    </ul>
+                  )}
                 </li>
               </>
             )}
+
             {isLoggedIn && userType === 'admin' && (
               <li className="nav-item">
                 <Link className="nav-link" to="/admin-dashboard">Admin Dashboard</Link>
