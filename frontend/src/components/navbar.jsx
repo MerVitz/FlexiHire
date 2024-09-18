@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './styles/navbar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userType, setUserType] = useState(null);
-  const [notifications, setNotifications] = useState([]);
-  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track if user is logged in
+  const [userType, setUserType] = useState(null); // Track the type of user
+  const [notifications, setNotifications] = useState([]); // Store notifications
+  const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false); // Track if "More" dropdown is open
   const navigate = useNavigate();
 
+  // On component mount, check if the user is logged in
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userType = localStorage.getItem('user_type');
+
     if (token) {
-      setIsLoggedIn(true);
+      setIsLoggedIn(true); 
       setUserType(userType);
       fetchNotifications(token);
     } else {
@@ -29,125 +31,111 @@ function Navbar() {
     try {
       const response = await axios.get('http://localhost:8000/api/notifications/', {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          'Authorization': `Bearer ${token}`,
+        },
       });
-      setNotifications(response.data);
+      setNotifications(response.data); // Set fetched notifications to state
     } catch (error) {
       console.error('Error fetching notifications:', error.response ? error.response.data : error.message);
     }
   };
 
+  // Logout handler: removes user session from localStorage
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user_type');
-    setIsLoggedIn(false);
-    setUserType(null);
-    navigate('/');
+    localStorage.removeItem('token'); // Remove token from localStorage
+    localStorage.removeItem('user_type'); // Remove user type from localStorage
+    setIsLoggedIn(false); // Set login state to false
+    setUserType(null); // Reset user type
+    navigate('/'); // Redirect to the home page
   };
 
-  // Toggle the Notification Dropdown
-  const toggleNotificationDropdown = () => {
-    setIsNotificationDropdownOpen(!isNotificationDropdownOpen);
-    setIsProfileDropdownOpen(false);
-  };
-
-  // Toggle the Profile Dropdown
-  const toggleProfileDropdown = () => {
-    setIsProfileDropdownOpen(!isProfileDropdownOpen);
-    setIsNotificationDropdownOpen(false);
+  // Toggle the More dropdown
+  const toggleMoreDropdown = () => {
+    setIsMoreDropdownOpen(!isMoreDropdownOpen); // Toggle the dropdown visibility
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-      <div className="container">
-        <Link className="navbar-brand" to="/">FlexiHire</Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
-            {!isLoggedIn && (
-              <li className="nav-item">
-                <Link className="nav-link" to="/">Home</Link>
-              </li>
-            )}
-            {isLoggedIn && (
-              <li className="nav-item">
-                <Link className="nav-link" to="/home">Home</Link>
-              </li>
-            )}
-            <li className="nav-item">
-              <Link className="nav-link" to="/about">About</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/contact">Contact</Link>
-            </li>
+    <header className="header">
+      <div className="navbar-container">
+        <div className="nav">
+          <nav className="navbar navbar-expand-lg navbar-light sticky-top">
+            <div className="container-fluid">
+              <Link className="navbar-brand text-white fw-bold" to="/">FlexiHire</Link>
+              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <div className="collapse navbar-collapse" id="navbarNav">
+                <ul className="navbar-nav ms-auto">
+                  <li className="nav-item">
+                    <Link className="nav-link text-white" to="/">Home</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link text-white" to="/about">About</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link text-white" to="/contact">Contact</Link>
+                  </li>
 
-            {isLoggedIn && userType !== 'admin' && (
-              <>
-                <li className="nav-item dropdown">
-                  <a 
-                    className="nav-link dropdown-toggle btn btn-link" 
-                    onClick={toggleNotificationDropdown}
-                    aria-expanded={isNotificationDropdownOpen}
-                  >
-                    Notifications
-                  </a>
-                  {isNotificationDropdownOpen && (
-                    <ul className="dropdown-menu show">
-                      {notifications.length === 0 ? (
-                        <li className="dropdown-item">No new notifications</li>
-                      ) : (
-                        notifications.map((notification) => (
-                          <li key={notification.id} className="dropdown-item">
-                            {notification.message}
-                          </li>
-                        ))
-                      )}
-                    </ul>
+                  {/* Notifications */}
+                  {isLoggedIn && (
+                    <li className="nav-item">
+                      <Link className="nav-link text-white" to="#">
+                        Notifications <span className="badge bg-danger">{notifications.length}</span>
+                      </Link>
+                    </li>
                   )}
-                </li>
 
-                <li className="nav-item dropdown">
-                  <a 
-                    className="nav-link dropdown-toggle btn btn-link" 
-                    onClick={toggleProfileDropdown}
-                    aria-expanded={isProfileDropdownOpen}
-                  >
-                    Profile
-                  </a>
-                  {isProfileDropdownOpen && (
-                    <ul className="dropdown-menu show">
-                      <li>
-                        <Link className="dropdown-item" to="/inbox">Inbox</Link>
+                  {/* Search functionality */}
+                  {isLoggedIn && (
+                    <li className="nav-item">
+                      <input type="text" placeholder="Search..." className="form-control" style={{ maxWidth: '200px' }} />
+                    </li>
+                  )}
+
+                  {/* More dropdown with Dashboard and Logout */}
+                  {isLoggedIn && (
+                    <li className="nav-item dropdown">
+                      <a 
+                        href="#"
+                        className="nav-link dropdown-toggle text-white"
+                        id="navbarDropdown"
+                        role="button"
+                        aria-expanded={isMoreDropdownOpen}
+                        onClick={toggleMoreDropdown}
+                      >
+                        More
+                      </a>
+                      <div className={`dropdown-menu ${isMoreDropdownOpen ? 'show' : ''}`} aria-labelledby="navbarDropdown">
+                        {userType === 'istaff' ? (
+                          <Link className='dropdown-item' to="/admin-dashboard">Dashboard</Link>
+                        ): (
+                          <Link className='dropdown-item' to="/custom-dashboard">Dashboard</Link>
+                        )}
+                        <a className='dropdown-item' onClick={handleLogout}>Logout</a>
+                      </div>
+                    </li>
+
+
+                  )}
+
+                  {/* Show Sign Up and Sign In buttons if not logged in */}
+                  {!isLoggedIn && (
+                    <>
+                      <li className="nav-item">
+                        <Link className="nav-link text-white" to="/signup">Register</Link>
                       </li>
-                    </ul>
+                      <li className="nav-item">
+                        <Link className="nav-link text-white" to="/signin">Login</Link>
+                      </li>
+                    </>
                   )}
-                </li>
-              </>
-            )}
-
-            {isLoggedIn && userType === 'admin' && (
-              <li className="nav-item">
-                <Link className="nav-link" to="/admin-dashboard">Admin Dashboard</Link>
-              </li>
-            )}
-            {isLoggedIn && (
-              <li className="nav-item">
-                <button onClick={handleLogout} className="btn btn-outline-light">Logout</button>
-              </li>
-            )}
-            {!isLoggedIn && (
-              <li className="nav-item d-flex">
-                <Link className="btn btn-warning me-2" to="/signup">Sign Up</Link>
-                <Link className="btn btn-light" to="/signin">Sign In</Link>
-              </li>
-            )}
-          </ul>
+                </ul>
+              </div>
+            </div>
+          </nav>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }
 

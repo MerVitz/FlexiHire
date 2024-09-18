@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import './styles/landingPage.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Navbar from './navbar';
 
 const LandingPage = () => {
 
@@ -85,16 +86,7 @@ const featureSettings = {
     <div className="landing-page">
       <header className="header">
         <div className="navbar-container">
-          <nav className="navbar">
-            <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/about">About</Link></li>
-              <li><Link to="/contact">Contact</Link></li>
-              <li><Link to="/notifications">Notifications</Link></li>
-              <li><Link to="/signup">Sign Up</Link></li>
-              <li><Link to="/signin">Sign In</Link></li>
-            </ul>
-          </nav>
+          <Navbar/>
         </div>
       </header>
 

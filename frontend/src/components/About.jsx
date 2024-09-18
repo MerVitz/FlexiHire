@@ -1,21 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import './styles/about.css';
+import Navbar from './navbar';
 
 const About = () => {
   return (
     <div className="about-section">
       <header className="header">
-        <nav className="navbar">
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/contact">Contact</a></li>
-            <li><a href="/notifications">Notifications</a></li>
-            <li><a href="/signup">Sign Up</a></li>
-            <li><a href="/signin">Sign In</a></li>
-          </ul>
-        </nav>
+        <Navbar/>
       </header>
       <section className="about-content">
         <h1>About FlexiHire</h1>
