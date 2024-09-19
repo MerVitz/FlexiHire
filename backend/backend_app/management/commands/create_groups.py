@@ -6,14 +6,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Create Customer group
-        customer_group, customer_created = Group.objects.get_or_create(name='Customer')
+        customer_group, customer_created = Group.objects.get_or_create(name='customer')
         if customer_created:
             self.stdout.write(self.style.SUCCESS('Customer group created'))
         else:
             self.stdout.write(self.style.WARNING('Customer group already exists'))
 
         # Create Admin group
-        admin_group, admin_created = Group.objects.get_or_create(name='Admin')
+        admin_group, admin_created = Group.objects.get_or_create(name='admin')
         if admin_created:
             self.stdout.write(self.style.SUCCESS('Admin group created'))
         else:

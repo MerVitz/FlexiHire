@@ -106,7 +106,7 @@ function Navbar() {
                         More
                       </a>
                       <div className={`dropdown-menu ${isMoreDropdownOpen ? 'show' : ''}`} aria-labelledby="navbarDropdown">
-                        {userType === 'istaff' ? (
+                        {userType === 'admin' ? (
                           <Link className='dropdown-item' to="/admin-dashboard">Dashboard</Link>
                         ): (
                           <Link className='dropdown-item' to="/custom-dashboard">Dashboard</Link>

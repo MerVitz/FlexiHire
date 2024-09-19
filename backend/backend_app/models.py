@@ -34,8 +34,8 @@ class CustomUser(AbstractUser):
     CUSTOMER = 'customer'
     ADMIN = 'admin'
     USER_TYPE_CHOICES = [
-        (CUSTOMER, 'Customer'),
-        (ADMIN, 'Admin')
+        (CUSTOMER, 'customer'),
+        (ADMIN, 'admin')
     ]
     
     username=None

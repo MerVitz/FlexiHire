@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import './styles/signin.css';
 
 function SignIn() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');``
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
@@ -15,9 +15,11 @@ function SignIn() {
     try {
       const response = await axios.post('http://localhost:8000/api/login/', { email, password });
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user_id', response.data.user_id); // Ensure user ID is stored correctly
+      localStorage.setItem('user_id', response.data.user_id);
       localStorage.setItem('user_type', response.data.user_type);
-      console.log('Log is  successful, this is the id of the user;', response.data.user_id)
+      console.log('session user', response.data.user_id)
+      console.log('Session token', response.data.token)
+      console.log('session user type', response.data.user_type)
       if (response.data.user_type === 'admin') {
         navigate('/admin-dashboard');
       } else if (response.data.user_type === 'customer') {
