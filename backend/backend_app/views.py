@@ -151,6 +151,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
 class UserCreate(generics.CreateAPIView):
+    #To work on this 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 

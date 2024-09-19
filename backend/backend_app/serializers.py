@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import (Booking, Comment, CustomUser, Equipment, Maintenance,
                      Notification, Payment, Review)
 
+# To work on this
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -17,6 +18,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             last_name=validated_data.get('last_name')
         )
         return user
+        
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review

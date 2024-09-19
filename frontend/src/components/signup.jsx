@@ -2,7 +2,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import './styles/signup.css';
-
+// To understand how it translate to this palce
 function SignUp() {
   const [formData, setFormData] = useState({
     email: '',

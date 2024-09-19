@@ -8,6 +8,19 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
 from django.db import models
 
+#  from what have seen, the models have the logic of assigning usera
+#   being registred to auth groups and providing thier users types.
+#     I need to be sure that there is alogic that when user registres
+#      them selves from the signup page , They get assigned, to a group,
+#       customer group, then an automatic logic that   sets all members
+#        in in that auth group to  have is active to true and is_staff
+#         false.  then the same automatic logic  when upadtes users that
+#          are in the admin group to have  is_staff true and is_active
+#            true also.  therefore on registration what should happen
+#             is just assigning the users being regisred to group.
+#              and then; is_staff, is_active, user_type will be done
+              automatic.  
+
 # 1. CustomUser and CustomUserManager
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -18,7 +31,7 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         
-        customer_group, created = Group.objects.get_or_create(name='Customer')
+        customer_group, created = Group.objects.get_or_create(name='customer')
         user.groups.add(customer_group)
         user.save(using=self._db)
         
