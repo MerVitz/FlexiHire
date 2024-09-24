@@ -175,3 +175,14 @@ class LogoutView(APIView):
         # Assuming JWT is managed client-side, simply return a success response
         logout(request)
         return Response(status=status.HTTP_200_OK)
+
+class CheckAdminPriviledgesView(APIView):
+    permission_classes =[IsAuthenticated]
+
+    def get(self, request):
+        user =request.user
+
+        if user.is_superuser and user.is_staff and user.is_active and user.groups.filter(name='Admin').exists():
+            return Response ({'has_admin_privileges': True}, status=200)
+        else:
+            return Response ({'has_admin_privileges': False}, status=200)

@@ -8,18 +8,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
 from django.db import models
 
-#  from what have seen, the models have the logic of assigning usera
-#   being registred to auth groups and providing thier users types.
-#     I need to be sure that there is alogic that when user registres
-#      them selves from the signup page , They get assigned, to a group,
-#       customer group, then an automatic logic that   sets all members
-#        in in that auth group to  have is active to true and is_staff
-#         false.  then the same automatic logic  when upadtes users that
-#          are in the admin group to have  is_staff true and is_active
-#            true also.  therefore on registration what should happen
-#             is just assigning the users being regisred to group.
-#              and then; is_staff, is_active, user_type will be done
-              automatic.  
+
 
 # 1. CustomUser and CustomUserManager
 class CustomUserManager(BaseUserManager):
@@ -29,19 +18,42 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+
+        # If a superuser (admin) is creating this user, set them as Admin
+        if created_by and created_by.is_superuser and created_by.is_staff and created_by.is_active:
+            user.user_type = CustomUser.ADMIN  # Set user_type to 'admin'
+            user.is_staff = True  # Admins have is_staff=True
+            admin_group, created = Group.objects.get_or_create(name='Admin')
+            user.save(using=self._db)
+            user.groups.add(admin_group)  # Add to the Admin group
+        else:
+            # Default user type and group for regular users
+            user.user_type = CustomUser.CUSTOMER  # Default user_type is 'customer'
+            user.is_staff = False  # Customers don't have staff permissions
+            customer_group, created = Group.objects.get_or_create(name='Customer')
+            user.save(using=self._db)
+            user.groups.add(customer_group)  # Add to the Customer group
         
-        customer_group, created = Group.objects.get_or_create(name='customer')
-        user.groups.add(customer_group)
         user.save(using=self._db)
-        
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
+        """
+        Creates and returns a superuser, adding them to the Admin group and setting their user_type to 'admin'.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
 
-        return self.create_user(email, password, **extra_fields)
+        user = self.create_user(email, password, **extra_fields)
+
+        # Ensure the superuser is in the Admin group and has the correct user_type
+        user.user_type = CustomUser.ADMIN
+        admin_group, created = Group.objects.get_or_create(name='Admin')
+        user.groups.add(admin_group)
+        user.save(using=self._db)
+
+        return user
 
 class CustomUser(AbstractUser):
     CUSTOMER = 'customer'
@@ -51,7 +63,7 @@ class CustomUser(AbstractUser):
         (ADMIN, 'admin')
     ]
     
-    username=None
+    username = None
     email = models.EmailField(unique=True)
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default=CUSTOMER)
     is_staff = models.BooleanField(default=False)
@@ -63,35 +75,12 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ['first_name', 'last_name']
     
     objects = CustomUserManager()
-    
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='custom_user_set',
-        blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups'
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='custom_user_set',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions'
-    )
-    
+
     def __str__(self):
         return self.email
-    
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        if self.user_type == self.ADMIN:
-            self.groups.clear()
-            admin_group, created = Group.objects.get_or_create(name='Admin')
-            self.groups.add(admin_group)
-        elif self.user_type == self.CUSTOMER:
-            self.groups.clear()
-            customer_group, created = Group.objects.get_or_create(name='Customer')
-            self.groups.add(customer_group)
 
 # 2. Equipment model
 class Equipment(models.Model):

@@ -20,6 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/notifications/<int:pk>/confirm/', views.NotificationConfirmView.as_view(), name='notification-confirm'),
+    path('api/check-admin-privileges/', views.CheckAdminPriviledgesView.as_view(), name='check-admin-privileges'),
     path('api/', include('backend_app.urls')),
 ]
 
