@@ -33,36 +33,40 @@ class NotificationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
-        return Notification.objects.filter(user=self.request.user)
+        return Notification.objects.filter(user=self.request.user, is_read=False)
 
 class NotificationConfirmView(generics.UpdateAPIView):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
 
     def update(self, request, *args, **kwargs):
+        print(f"Updating notification {kwargs['pk']} for user {request.user}")
         instance = self.get_object()
+
         instance.confirmed = True
+        instance.is_read = True
         instance.save()
 
         # Update related booking status if required
+        item_details = None
         if instance.requires_confirmation:
             booking = instance.booking
             booking.is_confirmed = True
             booking.save()
+        
+            # Include item details in the response
+            item_details = {
+                'name': booking.equipment.name,
+                'price': booking.equipment.price_per_day,
+                'start_time': booking.start_time,
+                'end_time': booking.end_time,
+                'id': booking.id
+            }
 
-            # Notify user that booking is confirmed
-            Notification.objects.create(
-                user=booking.user,
-                booking=booking,
-                message=f"Your booking for {booking.equipment.name} from {booking.start_time} to {booking.end_time} has been successful.",
-                requires_confirmation=False
-            )
-
-        return Response({'status': 'notification confirmed'})
-
-class PaymentViewSet(viewsets.ModelViewSet):
-    queryset = Payment.objects.all()
-    serializer_class = PaymentSerializer
+        return Response({
+            'status': 'notification confirmed',
+            'item_details': item_details
+            })
 
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.select_related('equipment', 'user').all()
@@ -88,7 +92,7 @@ class BookingViewSet(viewsets.ModelViewSet):
                     user=admin,
                     booking=booking,
                     message=f"Booking request for {booking.equipment.name} from {booking.start_time} to {booking.end_time}.",
-                    requires_confirmation=True
+                    requires_confirmation=False
                 )
 
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -100,19 +104,24 @@ class BookingViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['put'])
     def confirm(self, request, pk=None):
         booking = self.get_object()
-        booking.is_confirmed = True
-        booking.save()
 
         # Notify user that booking is confirmed
         Notification.objects.create(
             user=booking.user,
             booking=booking,
             message=f"Your booking for {booking.equipment.name} from {booking.start_time} to {booking.end_time} has been confirmed.",
-            requires_confirmation=False
+            requires_confirmation=True
         )
+
+        booking.is_confirmed = True
+        booking.save()
 
         serializer = self.get_serializer(booking)
         return Response(serializer.data)
+
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
 
 class EquipmentViewSet(viewsets.ModelViewSet):
     queryset = Equipment.objects.all()

@@ -156,3 +156,15 @@ SIMPLE_JWT = {
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
 }
+
+#Payment Processes SetUp
+#Stripe set-up
+STRIPE_PUBLIC_KEY = "pk_test_51Qexs8P0fh2va7MqS71RwV3Qoo9r3XCiSWk2wpxdFkHg04xnRvHbZhb5YIaSxXav9zRC1y9oYEG5AfkW0nkhX2qI00rTtSt9rH" #The publishable key
+STRIPE_SECRET_KEY = "sk_test_51Qexs8P0fh2va7MqcIK3hpoNkHyFf105H7kbvYO8jyGIt9hx5MRnM39IRvllwZnINWqVJ93LxSP0B4wpUNLoLkI800OLsk5RLp" #Secret Key
+
+#MpesaPayment Process
+MPESA_CONSUMER_KEY = "qhs37bO8inwuv3PLqhBbwqT3ntGcodVDcXYcAjZLmbwH0aCG"
+MPESA_CONSUMER_SECRET = "QJjYdLAv5W5D2fwZJv6nfruFgc4TqLJIPNhAUSAnZpl0e4aQluSOwopHY2XVxRK2"
+MPESA_SHORTCODE = "174379"
+MPESA_PASSKEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+CALLBACK_URL = "https://yourdomain.com/api/mpesa-callback/"
